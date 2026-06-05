@@ -1,11 +1,11 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import Editor from "@monaco-editor/react";
 import axios from "axios";
 import {
   Zap, Code2, Database, Globe, Shield, LayoutDashboard,
   FileCode2, BarChart3, Wrench, ChevronRight, Cpu,
   CheckCircle2, Loader2, AlertTriangle, ExternalLink,
-  Sparkles, Terminal, Layers, X, Eye, EyeOff, Key
+  Sparkles, Terminal, Layers
 } from "lucide-react";
 import "./App.css";
 
@@ -51,11 +51,6 @@ const FEATURES = [
 
 type Status = "idle" | "loading" | "success" | "error";
 
-const PROVIDERS = [
-  { id: "groq",       name: "Groq",       free: true,  placeholder: "gsk_...",  url: "https://console.groq.com" },
-  { id: "openai",     name: "OpenAI",     free: false, placeholder: "sk-...",   url: "https://platform.openai.com" },
-  { id: "openrouter", name: "OpenRouter", free: true,  placeholder: "sk-or-...",url: "https://openrouter.ai/keys" },
-];
 
 // ── Component ────────────────────────────────────────────────────────────────
 
@@ -67,33 +62,6 @@ export default function App() {
   const [activeTab, setActiveTab]     = useState("full");
   const [error, setError]             = useState("");
   const [jobId, setJobId]             = useState("");
-  const [showSettings, setShowSettings] = useState(false);
-  const [apiKey, setApiKey]           = useState("");
-  const [provider, setProvider]       = useState("groq");
-  const [showKey, setShowKey]         = useState(false);
-
-  // Load saved key from localStorage
-  useEffect(() => {
-    const savedKey      = localStorage.getItem("ai_compiler_key") || "";
-    const savedProvider = localStorage.getItem("ai_compiler_provider") || "groq";
-    // Clear any previously saved OpenAI key that has no credits
-    if (savedProvider === "openai") {
-      localStorage.setItem("ai_compiler_provider", "groq");
-      setProvider("groq");
-      setApiKey("");
-      setShowSettings(true);
-    } else {
-      setApiKey(savedKey);
-      setProvider(savedProvider);
-      if (!savedKey) setShowSettings(true);
-    }
-  }, []);
-
-  const saveSettings = () => {
-    localStorage.setItem("ai_compiler_key", apiKey);
-    localStorage.setItem("ai_compiler_provider", provider);
-    setShowSettings(false);
-  };
 
   const generate = useCallback(async () => {
     if (!prompt.trim() || status === "loading") return;
@@ -510,94 +478,6 @@ export default function App() {
         </div>
       </footer>
 
-      {/* ── Settings Modal ── */}
-      {showSettings && (
-        <div style={{
-          position: "fixed", inset: 0, background: "rgba(0,0,0,0.7)", backdropFilter: "blur(6px)",
-          display: "flex", alignItems: "center", justifyContent: "center", zIndex: 999, padding: 20,
-        }}>
-          <div style={{
-            background: "var(--bg-elevated)", border: "1px solid var(--border-light)",
-            borderRadius: "var(--radius-xl)", padding: 28, width: "100%", maxWidth: 460,
-            boxShadow: "var(--shadow-lg)",
-          }}>
-            {/* Header */}
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                <Key size={18} color="var(--brand-light)" />
-                <span style={{ fontWeight: 700, fontSize: 16 }}>API Key Settings</span>
-              </div>
-              {apiKey && (
-                <button onClick={() => setShowSettings(false)} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-muted)", padding: 4 }}>
-                  <X size={18} />
-                </button>
-              )}
-            </div>
-
-            {/* Provider select */}
-            <div style={{ marginBottom: 16 }}>
-              <div className="section-label" style={{ marginBottom: 8 }}>Select Provider</div>
-              <div style={{ display: "flex", gap: 8 }}>
-                {PROVIDERS.map(p => (
-                  <button key={p.id} onClick={() => setProvider(p.id)} style={{
-                    flex: 1, padding: "10px 8px", borderRadius: "var(--radius)", cursor: "pointer",
-                    border: `1px solid ${provider === p.id ? "var(--brand)" : "var(--border)"}`,
-                    background: provider === p.id ? "var(--brand-glow)" : "var(--bg-surface)",
-                    color: provider === p.id ? "var(--brand-light)" : "var(--text-muted)",
-                    fontSize: 12, fontWeight: 600, fontFamily: "Inter, sans-serif",
-                    display: "flex", flexDirection: "column", alignItems: "center", gap: 4,
-                  }}>
-                    {p.name}
-                    {p.free && <span style={{ fontSize: 10, color: "var(--green)", fontWeight: 500 }}>FREE</span>}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Key input */}
-            <div style={{ marginBottom: 8 }}>
-              <div className="section-label" style={{ marginBottom: 8 }}>Your API Key</div>
-              <div style={{ position: "relative" }}>
-                <input
-                  type={showKey ? "text" : "password"}
-                  value={apiKey}
-                  onChange={e => setApiKey(e.target.value)}
-                  placeholder={PROVIDERS.find(p => p.id === provider)?.placeholder}
-                  style={{
-                    width: "100%", background: "var(--bg-surface)", border: "1px solid var(--border-light)",
-                    borderRadius: "var(--radius)", color: "var(--text-primary)", padding: "11px 40px 11px 14px",
-                    fontSize: 13, fontFamily: "JetBrains Mono, monospace", outline: "none",
-                  }}
-                />
-                <button onClick={() => setShowKey(!showKey)} style={{
-                  position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)",
-                  background: "none", border: "none", cursor: "pointer", color: "var(--text-muted)", padding: 0,
-                }}>
-                  {showKey ? <EyeOff size={15} /> : <Eye size={15} />}
-                </button>
-              </div>
-            </div>
-
-            {/* Get key link */}
-            <a href={PROVIDERS.find(p => p.id === provider)?.url} target="_blank" rel="noreferrer"
-              style={{ fontSize: 12, color: "var(--brand-light)", display: "flex", alignItems: "center", gap: 4, marginBottom: 20, textDecoration: "none" }}>
-              <ExternalLink size={11} />
-              Get a free {PROVIDERS.find(p => p.id === provider)?.name} API key
-            </a>
-
-            {/* Info box */}
-            <div className="alert alert-success" style={{ marginBottom: 20, fontSize: 12 }}>
-              <Shield size={12} style={{ flexShrink: 0 }} />
-              Your key is stored only in your browser (localStorage). It is never saved on our servers.
-            </div>
-
-            {/* Save button */}
-            <button onClick={saveSettings} disabled={!apiKey.trim()} className="generate-btn">
-              <CheckCircle2 size={15} /> Save & Start Using
-            </button>
-          </div>
-        </div>
-      )}
 
     </div>
   );
