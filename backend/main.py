@@ -73,6 +73,11 @@ class GenerateRequest(BaseModel):
     prompt: str
 
 
+@app.options("/generate")
+async def generate_options():
+    return {}
+
+
 @app.post("/generate")
 async def generate(req: GenerateRequest):
     if not req.prompt or len(req.prompt.strip()) < 10:
