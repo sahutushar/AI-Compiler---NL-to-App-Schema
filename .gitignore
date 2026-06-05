@@ -18,7 +18,6 @@ frontend/.env
 __pycache__/
 *.pyc
 *.pyo
-.python-version
 
 # OS
 .DS_Store
