@@ -20,8 +20,8 @@ A compiler-inspired, 5-stage LLM pipeline that transforms any plain-English app 
 
 | Service | URL |
 |---|---|
-| Frontend | _Deploy on Vercel — add URL here_ |
-| Backend API | _Deploy on Railway — add URL here_ |
+| Frontend | _Deploy on Vercel  |
+| Backend API | _Deploy on Render |
 | API Docs (Swagger) | `{backend_url}/docs` |
 | Metrics Dashboard | `{backend_url}/metrics` |
 | Health Check | `{backend_url}/health` |
