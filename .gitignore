@@ -1,0 +1,25 @@
+# Backend secrets & generated files
+backend/.env
+backend/.env.production
+backend/*.db
+backend/__pycache__/
+backend/**/__pycache__/
+backend/*.pyc
+backend/test_pipeline.py
+backend/backend.log
+backend/validators/
+
+# Frontend
+frontend/node_modules/
+frontend/build/
+frontend/.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.python-version
+
+# OS
+.DS_Store
+Thumbs.db
