@@ -2,7 +2,7 @@
 
 # 🧠 AI Compiler — Natural Language → Production App Schema
 
-**Internship Task Submission · Base44 AI Engineer Internship · Tushar Sahu**
+**Internship Task Submission ·  AI Engineer Internship · Tushar Sahu**
 
 [![Python](https://img.shields.io/badge/Python-3.12-blue?logo=python)](https://python.org)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.111-green?logo=fastapi)](https://fastapi.tiangolo.com)
@@ -924,7 +924,7 @@ With 4 Groq free-tier keys:
 
 ## 👤 Author
 
-Built by **Tushar Sahu** for the Base44 AI Engineer Internship Task.
+Built by **Tushar Sahu** for the AI Engineer Internship Task.
 
 - GitHub: [github.com/sahutushar](https://github.com/sahutushar)
 - Repo: [AI-Compiler---NL-to-App-Schema](https://github.com/sahutushar/AI-Compiler---NL-to-App-Schema)
